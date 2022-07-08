@@ -13,7 +13,7 @@ function App() {
     Array(5),
   ]);
   const [enabledTile, setEnabledTile] = useState(0);
-  const [isGameOver, setGameOver] = useState(false);
+  //const [isGameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     getNewWord();
@@ -70,46 +70,44 @@ function App() {
   function handleKeyPress(e) {
     const isUndefined = (el) => el === undefined;
 
-    if (e.key === 'Enter') {
-      if (newInput[enabledTile].findIndex(isUndefined) === -1) checkWord();
-      else return;
+    if (/[A-Za-z]/.test(e.key)) {
+      handleLetterPress(e);
+    } else if (e.key === 'Enter') {
+      handleEnterPress(e);
+    }
+    console.log('currentTile: ', enabledTile);
 
-      function checkWord() {
-        console.log('test');
-        if (enabledTile === 5) {
-          setGameOver(true);
-        } else {
-          let newEnabled = enabledTile + 1;
-          setEnabledTile(newEnabled);
-          console.log(newEnabled);
-          return;
-        }
+    function handleEnterPress(e) {
+      if (newInput[enabledTile].findIndex(isUndefined) === -1) {
+        let newEnabled = enabledTile;
+        console.log('newTile: ', newEnabled);
+        setEnabledTile(newEnabled + 1);
+        console.log(enabledTile);
+        //setGameOver(true)
       }
     }
 
-    //if there are no empty spaces, don't continue
-    if (newInput[enabledTile].findIndex(isUndefined) === -1) return;
-    else if (/[A-Za-z]/.test(e.key)) {
-      console.log(e.key);
+    function handleLetterPress(e) {
       let handledInputItem = newInput[enabledTile];
-      console.log(handledInputItem);
       let newInputIndex = handledInputItem.findIndex(isUndefined);
       handledInputItem[newInputIndex] = e.key;
-      console.log(handledInputItem);
 
       let handledInput = newInput;
       handledInput[enabledTile] = handledInputItem;
-      console.log(handledInput);
-      //the slice is to let react know that state has changed, has no real effect.
+
+      console.log('handledItem: ', handledInputItem);
+      console.log('handledInput: ', handledInput);
+
       setNewInput(handledInput.slice());
-      console.log(newInput);
+      handledInputItem = Array(5);
+      console.log('currentArray: ', newInput);
     }
   }
 
   return (
     <>
       <Header />
-      <div className="App">
+      <div style={{ textTransform: 'uppercase' }} className="App">
         {currentWord}
         <Board />
       </div>
