@@ -8,11 +8,11 @@ const Tile = ({
   currentWord,
   isGameOver,
   setGameOver,
+  UpdateTile,
 }) => {
   //podríamos pasar el inputtedWord como prop: ({inputtedWord}) y que venga del padre como inputtedWords[index]
 
   const [inputtedWord, setInputtedWord] = useState([]);
-
   const [isRight, setRight] = useState([null, null, null, null, null]);
   const isCurrentTile = parseInt(number) === parseInt(currentTile);
   //on enter keypress the word is submitted if all requirements are met, so a tile gets filled and the next one should be activated
@@ -20,6 +20,9 @@ const Tile = ({
   useEffect(() => {
     if (!currentWord) return;
     if (isGameOver[0]) {
+      setTimeout(() => {
+        window.removeEventListener('keydown', handleKeyPress);
+      }, 100);
       setTimeout(() => {
         setRight([null, null, null, null, null]);
         setInputtedWord([]);
@@ -45,18 +48,21 @@ const Tile = ({
           }
         } else if (e.key === 'Enter') {
           if (inputtedWord.length === 5) {
+            window.removeEventListener('keydown', handleKeyPress);
+            UpdateTile(currentTile + 1);
+            // console.log(number);
             testInput();
-            console.log(
-              'submitted word!',
-              inputtedWord.toString().replaceAll(',', '')
-            );
+            //  console.log(
+            //   'submitted word!',
+            //   inputtedWord.toString().replaceAll(',', '')
+            // );
 
             function testInput() {
               let cleanString = inputtedWord.toString().replaceAll(',', '');
               let testRight = isRight;
               for (let i = 0; i < 5; i++) {
-                console.log(testRight, currentWord);
-                console.log(cleanString[i], currentWord[i]);
+                // console.log(testRight, currentWord);
+                // console.log(cleanString[i], currentWord[i]);
                 testRight[i] = cleanString[i].localeCompare(currentWord[i]);
               }
               setRight(testRight.slice());

@@ -7,6 +7,11 @@ const Board = () => {
   const [currentTile, setCurrentTile] = useState(0);
   const [isGameOver, setGameOver] = useState([false, undefined]);
 
+  const UpdateTile = () => {
+    if (currentTile > 5) return;
+    else setCurrentTile(currentTile + 1);
+  };
+
   useEffect(() => {
     if (!currentWord) getWord();
     if (isGameOver[0]) {
@@ -15,6 +20,7 @@ const Board = () => {
       setTimeout(() => {
         setGameOver([false, undefined]);
         setCurrentWord('');
+        setCurrentTile(0);
       }, 2000);
     }
 
@@ -35,12 +41,14 @@ const Board = () => {
       <Tile
         currentWord={currentWord}
         currentTile={currentTile}
+        UpdateTile={UpdateTile}
         setGameOver={setGameOver}
         isGameOver={isGameOver}
         number="0"
       />
 
       <Tile
+        UpdateTile={UpdateTile}
         currentWord={currentWord}
         currentTile={currentTile}
         isGameOver={isGameOver}
@@ -49,6 +57,7 @@ const Board = () => {
       />
 
       <Tile
+        UpdateTile={UpdateTile}
         currentWord={currentWord}
         currentTile={currentTile}
         isGameOver={isGameOver}
@@ -56,6 +65,7 @@ const Board = () => {
         number="2"
       />
       <Tile
+        UpdateTile={UpdateTile}
         currentWord={currentWord}
         currentTile={currentTile}
         isGameOver={isGameOver}
@@ -63,6 +73,7 @@ const Board = () => {
         number="3"
       />
       <Tile
+        UpdateTile={UpdateTile}
         currentWord={currentWord}
         currentTile={currentTile}
         isGameOver={isGameOver}
@@ -70,6 +81,7 @@ const Board = () => {
         number="4"
       />
       <Tile
+        UpdateTile={UpdateTile}
         currentWord={currentWord}
         currentTile={currentTile}
         isGameOver={isGameOver}
