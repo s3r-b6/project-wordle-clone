@@ -8,8 +8,11 @@ const Board = () => {
   const [isGameOver, setGameOver] = useState([false, undefined]);
 
   const UpdateTile = () => {
-    if (currentTile > 5) return;
-    else setCurrentTile(currentTile + 1);
+    if (currentTile > 5) {
+      return;
+    } else {
+      setCurrentTile(currentTile + 1);
+    }
   };
 
   useEffect(() => {
@@ -36,7 +39,6 @@ const Board = () => {
   //the idea is to be able to read and to write to the currentTile marker to be able to attach and disattach the key listeners for each tile when needed
   return (
     <>
-      <p>placeholder: {currentWord}</p>
       <Screen currentWord={currentWord} isGameOver={isGameOver} />
       <Tile
         UpdateTile={UpdateTile}
@@ -88,6 +90,7 @@ const Board = () => {
         setGameOver={setGameOver}
         number="5"
       />
+      <p style={{ fontSize: '10px' }}>placeholder: {currentWord}</p>
     </>
   );
 };

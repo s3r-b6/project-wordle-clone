@@ -1,5 +1,7 @@
+@import 'https://cdn.jsdelivr.net/npm/water.css@2/out/water.css';
+
 html {
-  background-color: #282c34;
+  background-color: #202b38 !important;
   color: white;
   display: flex;
   flex-direction: column;
@@ -22,7 +24,12 @@ html {
   align-items: center;
   justify-content: center;
 }
+.tile.disabled {
+  filter: contrast(105%);
+}
+
 .grid {
+  background-color: #1b2430;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,6 +39,7 @@ html {
   text-transform: uppercase;
   width: 30px;
   height: 30px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   -moz-user-select: none;
   user-select: none;
@@ -42,11 +50,15 @@ html {
 }
 
 #footer {
-  margin-top: 2rem;
+  margin-top: 1rem;
   padding-top: 0px;
   border-top: 1px solid grey;
 }
 #footer > p {
-  margin-top: 0.3rem;
+  margin-top: 0.5rem;
   font-size: 16px;
+}
+
+#screenPlaceholder {
+  height: 50px;
 }

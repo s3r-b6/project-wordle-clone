@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-//number is the Tiles index; currentTile is the actual boards tile, and setCurrentTile is the state changer for the previous parameter.
-
 const Tile = ({
   number,
   currentTile,
@@ -10,8 +8,6 @@ const Tile = ({
   setGameOver,
   UpdateTile,
 }) => {
-  //podríamos pasar el inputtedWord como prop: ({inputtedWord}) y que venga del padre como inputtedWords[index]
-
   const [inputtedWord, setInputtedWord] = useState([]);
   const [isRight, setRight] = useState([null, null, null, null, null]);
   const isCurrentTile = parseInt(number) === parseInt(currentTile);
@@ -24,6 +20,9 @@ const Tile = ({
         window.removeEventListener('keydown', handleKeyPress);
       }, 100);
       setTimeout(() => {
+        document.querySelectorAll(`.tile`).forEach((el) => {
+          el.classList.remove('disabled');
+        });
         setRight([null, null, null, null, null]);
         setInputtedWord([]);
         return;
@@ -40,7 +39,7 @@ const Tile = ({
             console.log('this keyPress does nothing!');
           else {
             let newInput = inputtedWord;
-            newInput.push(e.key);
+            newInput.push(e.key.toLowerCase());
             setInputtedWord(newInput.slice());
             //console.log('triggered letter');
             //console.log(`current word: ${newInput}`);
@@ -49,13 +48,13 @@ const Tile = ({
         } else if (e.key === 'Enter') {
           if (inputtedWord.length === 5) {
             window.removeEventListener('keydown', handleKeyPress);
+            document
+              .querySelector(`.tile.n${number}`)
+              .classList.add('disabled');
             UpdateTile(currentTile + 1);
-            // console.log(number);
             testInput();
-            //  console.log(
-            //   'submitted word!',
-            //   inputtedWord.toString().replaceAll(',', '')
-            // );
+            if (currentTile < 5) return;
+            else setGameOver([true, 'loser']);
 
             function testInput() {
               let cleanString = inputtedWord.toString().replaceAll(',', '');
@@ -85,7 +84,7 @@ const Tile = ({
   }, [isGameOver, currentTile, currentWord]);
 
   return (
-    <div className={`tile ${number}`}>
+    <div className={`tile n${number}`}>
       <Grid inputtedWord={inputtedWord} isRight={isRight} number="0" />
       <Grid inputtedWord={inputtedWord} isRight={isRight} number="1" />
       <Grid inputtedWord={inputtedWord} isRight={isRight} number="2" />
@@ -101,8 +100,8 @@ const Grid = ({ number, isRight, inputtedWord }) => {
       style={
         isRight[parseInt(number)] !== null
           ? {
-              backgroundColor: `${
-                isRight[parseInt(number)] === 0 ? 'green' : 'orange'
+              color: `${
+                isRight[parseInt(number)] === 0 ? '#53BF9D' : '#F94C66'
               }`,
             }
           : null
@@ -114,20 +113,22 @@ const Grid = ({ number, isRight, inputtedWord }) => {
   );
 };
 
-const Screen = ({ currentWord, isGameOver }) => {
-  return isGameOver[0] ? (
-    <h2>
-      {isGameOver[1] === 'winner' ? 'Yes! ' : 'Sorry! '}The word was:{' '}
-      {currentWord}!
-    </h2>
-  ) : null;
-};
-
 const Header = () => {
   return (
     <header className="appHeader">
-      <h1> Wordle React App </h1>
+      <h1> Wordle-Clone React App </h1>
     </header>
+  );
+};
+
+const Screen = ({ currentWord, isGameOver }) => {
+  return isGameOver[0] ? (
+    <h3 id="screen">
+      {isGameOver[1] === 'winner' ? 'Yes! ' : 'Sorry! '}The word was:{' '}
+      {currentWord}!
+    </h3>
+  ) : (
+    <div id="screenPlaceholder" />
   );
 };
 
