@@ -1,118 +1,92 @@
 import React, { useEffect, useState } from 'react';
+import { Header, Footer, Tile } from './components';
 import './App.css';
 
-function App() {
+const Board = () => {
   const [currentWord, setCurrentWord] = useState('');
-  //2D array to handle lines
-  const [newInput, setNewInput] = useState([
-    Array(5),
-    Array(5),
-    Array(5),
-    Array(5),
-    Array(5),
-    Array(5),
-  ]);
-  const [enabledTile, setEnabledTile] = useState(0);
-  //const [isGameOver, setGameOver] = useState(false);
+  const [currentTile, setCurrentTile] = useState(0);
+  const [isGameOver, setGameOver] = useState([false, undefined]);
 
   useEffect(() => {
-    getNewWord();
+    if (!currentWord) getWord();
+    if (isGameOver[0]) {
+      if (isGameOver[1] === 'winner') console.log('you win');
+      else if (isGameOver[1] === 'loser') console.log('you lose');
+      setTimeout(() => {
+        setGameOver([false, undefined]);
+        setCurrentWord('');
+      }, 300);
+    }
 
-    async function getNewWord() {
-      let wordList = await fetch(
+    async function getWord() {
+      let fetchedWord = await fetch(
         'https://random-word-api.herokuapp.com/word?length=5'
       );
-      wordList = await wordList.json();
-      let randomWord = await wordList[
-        Math.floor(Math.random() * wordList.length)
-      ];
-      setCurrentWord(randomWord);
+      fetchedWord = await fetchedWord.json();
+      setCurrentWord(await fetchedWord[0]);
     }
+  }, [isGameOver, currentWord]);
 
-    window.addEventListener('keypress', (e) => {
-      handleKeyPress(e);
-    });
-  }, []);
+  //the idea is to be able to read and to write to the currentTile marker to be able to attach and disattach the key listeners for each tile when needed
+  return (
+    <>
+      <h2>{currentWord}</h2>
+      <Tile
+        currentWord={currentWord}
+        currentTile={currentTile}
+        setGameOver={setGameOver}
+        isGameOver={isGameOver}
+        number="0"
+      />
 
-  function Header() {
-    return (
-      <header className="App-header">
-        <h1> Wordle React App </h1>
-      </header>
-    );
-  }
+      <Tile
+        currentWord={currentWord}
+        currentTile={currentTile}
+        isGameOver={isGameOver}
+        setGameOver={setGameOver}
+        number="1"
+      />
 
-  function Board() {
-    function Tile(props) {
-      return (
-        <div className={`tile ${props.number}`}>
-          <div className="grid">{newInput[parseInt(props.number)][0]}</div>
-          <div className="grid">{newInput[parseInt(props.number)][1]}</div>
-          <div className="grid">{newInput[parseInt(props.number)][2]}</div>
-          <div className="grid">{newInput[parseInt(props.number)][3]}</div>
-          <div className="grid">{newInput[parseInt(props.number)][4]}</div>
-        </div>
-      );
-    }
+      <Tile
+        currentWord={currentWord}
+        currentTile={currentTile}
+        isGameOver={isGameOver}
+        setGameOver={setGameOver}
+        number="2"
+      />
+      <Tile
+        currentWord={currentWord}
+        currentTile={currentTile}
+        isGameOver={isGameOver}
+        setGameOver={setGameOver}
+        number="3"
+      />
+      <Tile
+        currentWord={currentWord}
+        currentTile={currentTile}
+        isGameOver={isGameOver}
+        setGameOver={setGameOver}
+        number="4"
+      />
+      <Tile
+        currentWord={currentWord}
+        currentTile={currentTile}
+        isGameOver={isGameOver}
+        setGameOver={setGameOver}
+        number="5"
+      />
+    </>
+  );
+};
 
-    return (
-      <>
-        <Tile number="0" />
-        <Tile number="1" />
-        <Tile number="2" />
-        <Tile number="3" />
-        <Tile number="4" />
-        <Tile number="5" />
-      </>
-    );
-  }
-
-  function handleKeyPress(e) {
-    const isUndefined = (el) => el === undefined;
-
-    if (/[A-Za-z]/.test(e.key)) {
-      handleLetterPress(e);
-    } else if (e.key === 'Enter') {
-      handleEnterPress(e);
-    }
-    console.log('currentTile: ', enabledTile);
-
-    function handleEnterPress(e) {
-      if (newInput[enabledTile].findIndex(isUndefined) === -1) {
-        let newEnabled = enabledTile;
-        console.log('newTile: ', newEnabled);
-        setEnabledTile(newEnabled + 1);
-        console.log(enabledTile);
-        //setGameOver(true)
-      }
-    }
-
-    function handleLetterPress(e) {
-      let handledInputItem = newInput[enabledTile];
-      let newInputIndex = handledInputItem.findIndex(isUndefined);
-      handledInputItem[newInputIndex] = e.key;
-
-      let handledInput = newInput;
-      handledInput[enabledTile] = handledInputItem;
-
-      console.log('handledItem: ', handledInputItem);
-      console.log('handledInput: ', handledInput);
-
-      setNewInput(handledInput.slice());
-      handledInputItem = Array(5);
-      console.log('currentArray: ', newInput);
-    }
-  }
-
+export default function App() {
   return (
     <>
       <Header />
       <div style={{ textTransform: 'uppercase' }} className="App">
-        {currentWord}
         <Board />
       </div>
+      <Footer />
     </>
   );
 }
-
-export default App;

@@ -9,7 +9,7 @@ html {
   text-align: center;
 }
 
-.App-header {
+.appHeader {
   border-bottom: 1px solid #ccc;
   margin-bottom: 1rem;
   min-height: 10vh;
@@ -39,4 +39,14 @@ html {
 
 .grid:hover {
   cursor: pointer;
+}
+
+#footer {
+  margin-top: 2rem;
+  padding-top: 0px;
+  border-top: 1px solid grey;
+}
+#footer > p {
+  margin-top: 0.3rem;
+  font-size: 16px;
 }
