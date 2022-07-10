@@ -39,11 +39,11 @@ const Board = () => {
       <p>placeholder: {currentWord}</p>
       <Screen currentWord={currentWord} isGameOver={isGameOver} />
       <Tile
+        UpdateTile={UpdateTile}
         currentWord={currentWord}
         currentTile={currentTile}
-        UpdateTile={UpdateTile}
-        setGameOver={setGameOver}
         isGameOver={isGameOver}
+        setGameOver={setGameOver}
         number="0"
       />
 
