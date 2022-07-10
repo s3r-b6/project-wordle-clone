@@ -1,24 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-const Header = () => {
-  return (
-    <header className="appHeader">
-      <h1> Wordle React App </h1>
-    </header>
-  );
-};
-
-const Footer = () => {
-  return (
-    <>
-      <footer id="footer">
-        <p>lorem ipsum</p>
-      </footer>
-    </>
-  );
-};
-
 //number is the Tiles index; currentTile is the actual boards tile, and setCurrentTile is the state changer for the previous parameter.
+
 const Tile = ({
   number,
   currentTile,
@@ -26,7 +9,10 @@ const Tile = ({
   isGameOver,
   setGameOver,
 }) => {
+  //podríamos pasar el inputtedWord como prop: ({inputtedWord}) y que venga del padre como inputtedWords[index]
+
   const [inputtedWord, setInputtedWord] = useState([]);
+
   const [isRight, setRight] = useState([null, null, null, null, null]);
   const isCurrentTile = parseInt(number) === parseInt(currentTile);
   //on enter keypress the word is submitted if all requirements are met, so a tile gets filled and the next one should be activated
@@ -34,8 +20,11 @@ const Tile = ({
   useEffect(() => {
     if (!currentWord) return;
     if (isGameOver[0]) {
-      setInputtedWord([]);
-      return;
+      setTimeout(() => {
+        setRight([null, null, null, null, null]);
+        setInputtedWord([]);
+        return;
+      }, 1600);
     }
     const handleKeyPress = (e) => {
       if (e.key === 'Backspace') {
@@ -72,12 +61,8 @@ const Tile = ({
               }
               setRight(testRight.slice());
               let areAllRight = (el) => el === 0;
-              if (isRight.every(areAllRight)) {
-                setTimeout(() => {
-                  setGameOver([true, 'winner']);
-                  setRight([null, null, null, null, null]);
-                  console.log('you win');
-                }, 600);
+              if (testRight.every(areAllRight)) {
+                setGameOver([true, 'winner']);
               }
             }
           } else {
@@ -123,4 +108,30 @@ const Grid = ({ number, isRight, inputtedWord }) => {
   );
 };
 
-export { Header, Footer, Tile };
+const Screen = ({ currentWord, isGameOver }) => {
+  return isGameOver[0] ? (
+    <h2>
+      {isGameOver[1] === 'winner' ? 'Yes! ' : 'Sorry! '}The word was:{' '}
+      {currentWord}!
+    </h2>
+  ) : null;
+};
+
+const Header = () => {
+  return (
+    <header className="appHeader">
+      <h1> Wordle React App </h1>
+    </header>
+  );
+};
+
+const Footer = () => {
+  return (
+    <>
+      <footer id="footer">
+        <p>lorem ipsum</p>
+      </footer>
+    </>
+  );
+};
+export { Header, Footer, Tile, Screen };

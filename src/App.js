@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Header, Footer, Tile } from './components';
+import { Header, Footer, Tile, Screen } from './components';
 import './App.css';
 
 const Board = () => {
@@ -15,7 +15,7 @@ const Board = () => {
       setTimeout(() => {
         setGameOver([false, undefined]);
         setCurrentWord('');
-      }, 300);
+      }, 2000);
     }
 
     async function getWord() {
@@ -30,7 +30,8 @@ const Board = () => {
   //the idea is to be able to read and to write to the currentTile marker to be able to attach and disattach the key listeners for each tile when needed
   return (
     <>
-      <h2>{currentWord}</h2>
+      <p>placeholder: {currentWord}</p>
+      <Screen currentWord={currentWord} isGameOver={isGameOver} />
       <Tile
         currentWord={currentWord}
         currentTile={currentTile}
